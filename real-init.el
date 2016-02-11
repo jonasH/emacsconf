@@ -26,6 +26,15 @@
 (setq ido-everywhere t)
 (ido-mode 1)
 
+(add-hook 'org-mode-hook
+	  (lambda ()
+	    (local-unset-key (kbd "C-,"))
+	    (local-unset-key (kbd "M-<up>"))
+	    (local-unset-key (kbd "M-<down>"))
+	    (local-unset-key (kbd "M-<left>"))
+	    (local-unset-key (kbd "M-<right>"))
+	    ))
+
 
 (global-set-key (kbd "C-x 2") 'my/vsplit-last-buffer)
 (global-set-key (kbd "C-x 3") 'my/hsplit-last-buffer)
