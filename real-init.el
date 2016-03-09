@@ -55,7 +55,8 @@
 (global-set-key (kbd "M-y") 'browse-kill-ring)
 
 (yas-global-mode 1)
-
+(global-unset-key (kbd "C-x C-b"))
+(global-set-key (kbd "C-x C-b") 'ibuffer)
 (global-set-key (kbd "<f12>") 'kill-this-buffer)
 (global-unset-key (kbd "C-v"))
 (global-set-key (kbd "C-v") 'yank)
@@ -77,10 +78,58 @@
 			     '(try-expand-dabbrev
 			       try-expand-dabbrev-all-buffers) t))
 (global-set-key (kbd "<f2>") 'flycheck-next-error)
-(global-set-key (kbd "<f5>") 'gud-break)
-(global-set-key (kbd "<f6>") 'gud-step)
-(global-set-key (kbd "<f7>") 'gud-next)
-(global-set-key (kbd "<f8>") 'gud-cont)
+
+(defun py-extract-variable (var_name)
+  (interactive "sVar Name: ")
+  (when (region-active-p)
+	(kill-region (region-beginning) (region-end))
+	(insert var_name)
+	(python-nav-end-of-statement 1)
+	(forward-char 1)
+	(python-nav-backward-statement 1)
+	(move-beginning-of-line 1)
+	(open-line 1)
+	(indent-according-to-mode)
+	(insert (format "%s = " var_name))
+	(yank)
+      )
+  )
+
+(defun py-copy-to-import ()
+  (interactive)
+  (when (region-active-p)
+    (kill-ring-save (region-beginning) (region-end))
+    (beginning-of-buffer)
+    (open-line 1)
+    (insert "import ")
+    (yank)))
+
+(defun py-run-current-buffer()
+  (interactive)
+  (let ((script-buffer (buffer-name))
+	(cur-dir default-directory))
+    (other-window 1)
+    (cd cur-dir)
+    (pdb (concat "python " script-buffer))
+    (other-window -1)
+    ))
+
+(add-hook 'python-mode-hook
+	  (lambda () (local-set-key (kbd "C-c C-e") 'py-extract-variable)))
+(add-hook 'python-mode-hook
+	  (lambda () (local-set-key (kbd "<f6>") 'py-run-current-buffer)))
+(add-hook 'python-mode-hook
+	  (lambda () (local-set-key (kbd "C-c i") 'py-copy-to-import)))
+
+(fset 'py-swap-assignment
+   [?\C-a C-right C-left ?\C-  ?\C-s ?= left left ?\C-x ?\C-x ?\C-w C-right C-left ?\C-  end ?\C-w left left left ?\C-y end ?\M-2 ?\C-y])
+
+(add-hook 'python-mode-hook
+	  (lambda () (local-set-key (kbd "C-c C-w") 'py-swap-assignment)))
+
+
+(fset 'kill-whitespace-rows
+   [?\M-< ?\C-\M-% ?^ ?  ?+ ?$ return return ?!])
 
 
 (fset 'yes-or-no-p 'y-or-n-p)
