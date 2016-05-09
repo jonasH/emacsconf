@@ -77,7 +77,9 @@
 (global-set-key (kbd "C--") (make-hippie-expand-function
 			     '(try-expand-dabbrev
 			       try-expand-dabbrev-all-buffers) t))
+(global-set-key (kbd "C-å") 'revert-buffer)
 (global-set-key (kbd "<f2>") 'flycheck-next-error)
+
 
 (defun py-extract-variable (var_name)
   (interactive "sVar Name: ")
