@@ -19,8 +19,6 @@
 
 (require 'windmove)
 (windmove-default-keybindings 'meta)
-(require 'linum)
-(global-linum-mode 1)
 
 (setq ido-enable-flex-matching t)
 (setq ido-everywhere t)
@@ -58,6 +56,9 @@
 (global-unset-key (kbd "C-x C-b"))
 (global-set-key (kbd "C-x C-b") 'ibuffer)
 (global-set-key (kbd "<f12>") 'kill-this-buffer)
+(global-set-key (kbd "<f8>") 'gud-cont)
+(global-set-key (kbd "<f7>") 'gud-next)
+(global-set-key (kbd "<f6>") 'gud-step)
 (global-unset-key (kbd "C-v"))
 (global-set-key (kbd "C-v") 'yank)
 (global-set-key (kbd "C-ö") 'super-duplicate)
@@ -97,6 +98,20 @@
       )
   )
 
+(defun py-extract-function (var_name)
+  (interactive "sVar Name: ")
+  (when (region-active-p)
+    (kill-region (region-beginning) (region-end))
+    (indent-according-to-mode)
+    (insert (format "%s()" var_name))
+    (beginning-of-defun 1)
+    (open-line 2)
+    (indent-according-to-mode)
+    (insert (format "def %s():\n" var_name))
+    (yank)
+    )
+  )
+
 (defun py-copy-to-import ()
   (interactive)
   (when (region-active-p)
@@ -104,24 +119,32 @@
     (beginning-of-buffer)
     (open-line 1)
     (insert "import ")
-    (yank)))
+    (yank)
+    (set-mark-command -1)
+    (pop-global-mark)))
+
+
+(defun py-ev-string ()
+  (interactive)
+  (when (region-active-p)
+    (let ((reg (buffer-substring (region-beginning) (region-end))))
+      (python-shell-send-string reg))))
 
 (defun py-run-current-buffer()
   (interactive)
-  (let ((script-buffer (buffer-name))
-	(cur-dir default-directory))
+  (let ((script-buffer (buffer-file-name (current-buffer))))
     (other-window 1)
-    (cd cur-dir)
     (pdb (concat "python " script-buffer))
-    (other-window -1)
-    ))
+    (other-window -1)))
 
 (add-hook 'python-mode-hook
 	  (lambda () (local-set-key (kbd "C-c C-e") 'py-extract-variable)))
-(add-hook 'python-mode-hook
-	  (lambda () (local-set-key (kbd "<f6>") 'py-run-current-buffer)))
+;; (add-hook 'python-mode-hook
+;; 	  (lambda () (local-set-key (kbd "<f6>") 'py-run-current-buffer)))
 (add-hook 'python-mode-hook
 	  (lambda () (local-set-key (kbd "C-c i") 'py-copy-to-import)))
+
+
 
 (fset 'py-swap-assignment
    [?\C-a C-right C-left ?\C-  ?\C-s ?= left left ?\C-x ?\C-x ?\C-w C-right C-left ?\C-  end ?\C-w left left left ?\C-y end ?\M-2 ?\C-y])
@@ -143,3 +166,4 @@
 (setq mouse-wheel-follow-mouse 't) ;; scroll window under mouse
 (setq scroll-step 2) ;; keyboard scroll one line at a time
 (scroll-bar-mode 0)
+(menu-bar-mode 0)
