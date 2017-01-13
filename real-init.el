@@ -52,6 +52,9 @@
   (browse-kill-ring-default-keybindings))
 (global-set-key (kbd "M-y") 'browse-kill-ring)
 
+(require 'linum)
+(global-linum-mode 1)
+
 (yas-global-mode 1)
 (global-unset-key (kbd "C-x C-b"))
 (global-set-key (kbd "C-x C-b") 'ibuffer)
@@ -152,10 +155,19 @@
 (add-hook 'python-mode-hook
 	  (lambda () (local-set-key (kbd "C-c C-w") 'py-swap-assignment)))
 
+(defun kill-trailing-whitespace ()
+     (interactive)
+     (query-replace-regexp " +$" ""))
 
 (fset 'kill-whitespace-rows
    [?\M-< ?\C-\M-% ?^ ?  ?+ ?$ return return ?!])
 
+(fset 'camel_to_lower
+   [?\C-\M-s ?\[ ?A ?- ?Z ?\] left ?_ ?\M-l])
+
+
+(when (executable-find "ipython")
+  (setq python-shell-interpreter "ipython"))
 
 (fset 'yes-or-no-p 'y-or-n-p)
 (setq confirm-nonexistent-file-or-buffer nil)
