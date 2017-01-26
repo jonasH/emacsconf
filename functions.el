@@ -1,4 +1,9 @@
 ;;; Code:
+(defun python-run ()
+  (interactive)
+    (pdb (format "python %s" (dired-get-filename) )))
+
+
 (defun super-isearch-forward ()
   (interactive)
   (if (region-active-p)

@@ -169,6 +169,7 @@
 (when (executable-find "ipython")
   (setq python-shell-interpreter "ipython"))
 
+
 (fset 'yes-or-no-p 'y-or-n-p)
 (setq confirm-nonexistent-file-or-buffer nil)
 (tool-bar-mode -1)
