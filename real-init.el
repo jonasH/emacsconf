@@ -5,6 +5,13 @@
 ;; yasnippet
 ;; browse-kill-ring
 ;; magit
+(require 'package)
+(add-to-list 'package-archives
+             '("melpa" . "http://melpa.org/packages/") t)
+(when (< emacs-major-version 24)
+  (add-to-list 'package-archives '("gnu" . "http://elpa.gnu.org/packages/")))
+(package-initialize)
+
 (load "~/.emacs.d/elisp/functions.el")
 (load "~/.emacs.d/elisp/highlight-selection.el")
 (highlight-selection-mode 1)
@@ -16,6 +23,7 @@
 (global-set-key (read-kbd-macro "C-,") 'find-file-in-tags)
 
 (global-flycheck-mode 1)
+(setq flycheck-check-syntax-automatically '(mode-enabled save))
 
 (require 'windmove)
 (windmove-default-keybindings 'meta)
@@ -64,7 +72,7 @@
 (global-set-key (kbd "<f6>") 'gud-step)
 (global-unset-key (kbd "C-v"))
 (global-set-key (kbd "C-v") 'yank)
-(global-set-key (kbd "C-ö") 'super-duplicate)
+(global-set-key (kbd "C-<next>") 'super-duplicate)
 (global-set-key (kbd "C-w") 'super-delete)
 (global-set-key (kbd "C-s") 'super-isearch-forward)
 (global-set-key (kbd "C-;") 'comment-or-uncomment-region)
