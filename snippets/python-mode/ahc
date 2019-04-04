@@ -1,0 +1,5 @@
+# -*- mode: snippet; require-final-newline: nil -*-
+# name: assert_has_calls
+# key: ahc
+# --
+assert_has_calls(${1:exp_calls})

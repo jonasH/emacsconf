@@ -1,0 +1,6 @@
+# -*- mode: snippet; require-final-newline: nil -*-
+# name: bt
+# key: bt
+# group : debug
+# --
+import traceback; traceback.print_stack()

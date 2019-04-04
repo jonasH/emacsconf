@@ -1,0 +1,7 @@
+# -*- mode: snippet; require-final-newline: nil -*-
+# name: event
+# key: ev
+# group : wx
+# --
+def on_$1(self, event):
+    $0

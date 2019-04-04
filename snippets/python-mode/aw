@@ -1,0 +1,5 @@
+# -*- mode: snippet; require-final-newline: nil -*-
+# name: aw
+# group: testing
+# --
+assert_called_once_with($0)

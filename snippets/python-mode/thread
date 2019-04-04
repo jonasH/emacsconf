@@ -1,0 +1,7 @@
+# -*- mode: snippet; require-final-newline: nil -*-
+# name: thread
+# key: thread
+# --
+t = Thread(target=$1)
+t.setDaemon(True)
+t.start()

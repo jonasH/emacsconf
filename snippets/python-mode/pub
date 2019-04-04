@@ -1,0 +1,5 @@
+# -*- mode: snippet; require-final-newline: nil -*-
+# name: pub
+# key: pub
+# --
+from wx.lib.pubsub import pub

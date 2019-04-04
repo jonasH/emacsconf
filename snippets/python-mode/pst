@@ -1,0 +1,10 @@
+# -*- mode: snippet -*-
+# name: pubsub test
+# key: pst
+# group : testing
+# --
+
+def after():
+    $0
+
+pub.subscribe(after, $1)

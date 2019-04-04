@@ -1,0 +1,18 @@
+# -*- mode: snippet -*-
+# name: wx_test_class
+# key: tcs
+# group : testing
+# --
+import wx
+
+
+class Test${1:toTest}(${2:unittest.TestCase}):
+    @classmethod
+    def setUpClass(cls):
+        cls.app = wx.App(redirect=False)
+
+    def setUp(self):
+        self.ins = wx.Frame(None)
+
+    def tearDown(self):
+        self.ins.Close()

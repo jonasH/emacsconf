@@ -1,0 +1,9 @@
+# -*- mode: snippet; require-final-newline: nil -*-
+# name: setup_ui
+# key: sui
+# expand-env: ((yas/indent-line 'fixed)
+# --
+self.__setup_ui()
+
+def __setup_ui(self):
+    $0

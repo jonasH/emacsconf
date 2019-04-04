@@ -1,0 +1,13 @@
+# -*- mode: snippet; require-final-newline: nil -*-
+# name: pfull
+# key: pfull
+# --
+@property
+def $1(self):
+    return self._$1
+
+@$1.setter
+def $1(self, val):
+    self._$1 = val
+$0
+

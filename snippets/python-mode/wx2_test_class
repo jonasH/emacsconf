@@ -1,0 +1,17 @@
+# -*- mode: snippet -*-
+# name: wx2_test_class
+# key: tcs
+# group : testing
+# --
+import wx
+
+
+class Test${1:toTest}(${2:unittest.TestCase}):
+
+    def setUp(self):
+        self.app = wx.App(redirect=False)
+        self.ins = $0
+
+    def tearDown(self):
+        self.ins.Destroy()
+	wx.CallAfter(self.app.Exit)

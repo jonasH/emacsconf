@@ -63,6 +63,7 @@
 (require 'linum)
 (global-linum-mode 1)
 
+(setq yas-snippet-dirs '("~/.emacs.d/elisp/snippets")) 
 (yas-global-mode 1)
 (global-unset-key (kbd "C-x C-b"))
 (global-set-key (kbd "C-x C-b") 'ibuffer)

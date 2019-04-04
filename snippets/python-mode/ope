@@ -1,0 +1,6 @@
+# -*- mode: snippet; require-final-newline: nil -*-
+# name: ope
+# key: ope
+# group : nifty
+# --
+os.path.exists($0)

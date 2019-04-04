@@ -1,0 +1,4 @@
+# -*- mode: snippet; require-final-newline: nil -*-
+# name: sms
+# --
+pub.sendMessage(${1:TOPIC}$0)

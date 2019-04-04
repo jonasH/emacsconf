@@ -1,0 +1,21 @@
+# -*- mode: snippet; require-final-newline: nil -*-
+# name: rpanel
+# key: rpanel
+# group: wx
+# --
+from $1 import $2
+import wx
+
+def main():
+    app = wx.App(redirect=False)
+    frame = wx.Frame(None)
+    panel = $2(frame)
+    sizer = wx.BoxSizer(wx.HORIZONTAL)
+    sizer.Add(panel, 1, wx.ALL, 0)
+    frame.SetSizer(sizer)
+    sizer.Fit(frame)
+    frame.Show()
+    app.MainLoop()
+
+if __name__ == '__main__':
+    main()

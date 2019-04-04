@@ -1,0 +1,22 @@
+# -*- mode: snippet; require-final-newline: nil -*-
+# name: ts
+# group: pass2
+# --
+from scripts.parameter import ParameterTranslator
+NAME = "$1"
+
+
+def get_parameters():
+    parameters = []
+    return parameters
+
+
+def main(parameters):
+    pass$0
+
+
+if __name__ == '__main__':
+    pt = ParameterTranslator(get_parameters())
+    parsed_parameters = pt.parsed_parameters
+    for res in main(parsed_parameters):
+        print res

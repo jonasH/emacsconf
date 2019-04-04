@@ -1,0 +1,12 @@
+# -*- mode: snippet; require-final-newline: nil -*-
+# name: pit
+# group : pass1
+# --
+from integration_tests.script_tests.pass_test_case import main
+from integration_tests.script_tests.interactive_test_case import InteractiveTestCase
+
+class Test$1(InteractiveTestCase):
+$0
+
+if __name__ == '__main__':
+    main()

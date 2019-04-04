@@ -1,0 +1,15 @@
+# -*- mode: snippet; require-final-newline: nil -*-
+# name: scpi_prop
+# key: scpip
+# --
+@property
+def $1(self):
+    ans = self.query("$2?")
+    return $0ans.strip()
+
+@$1.setter
+def $1(self, val):
+    cmd = "$2 {}".format(val)
+    self.send_command(cmd)
+
+

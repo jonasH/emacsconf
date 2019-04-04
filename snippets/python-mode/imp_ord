@@ -1,0 +1,5 @@
+# -*- mode: snippet; require-final-newline: nil -*-
+# name: imp_ord
+# key: imp_ord
+# --
+from collections import OrderedDict

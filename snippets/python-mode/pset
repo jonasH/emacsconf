@@ -1,0 +1,7 @@
+# -*- mode: snippet; require-final-newline: nil -*-
+# name: pset
+# --
+@$1.setter
+def $1(self, val):
+    self._$1 = val
+$0

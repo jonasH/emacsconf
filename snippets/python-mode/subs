@@ -1,0 +1,5 @@
+# -*- mode: snippet; require-final-newline: nil -*-
+# name: subs
+# key: subs
+# --
+pub.subscribe(${1:fun}, ${2:topic})

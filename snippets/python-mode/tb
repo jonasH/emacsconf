@@ -1,0 +1,8 @@
+# -*- mode: snippet; require-final-newline: nil -*-
+# name: tb
+# key: tb
+# group : debug
+# --
+import traceback
+for x in traceback.format_stack():
+    print x

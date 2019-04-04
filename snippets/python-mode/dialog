@@ -1,0 +1,8 @@
+# -*- mode: snippet; require-final-newline: nil -*-
+# name: dlg
+# key: dlg
+# --
+dlg = wx.MessageDialog(self, "${1:message}", "${2:Error}",
+                       wx.OK | wx.ICON_ERROR)
+dlg.ShowModal()
+dlg.Destroy()

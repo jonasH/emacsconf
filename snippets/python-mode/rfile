@@ -1,0 +1,16 @@
+# -*- mode: snippet; require-final-newline: nil -*-
+# name: rfile
+# key: rfile
+# --
+from gui.$1 import $2
+from lib.pass_app import PassApp
+
+
+def main():
+    app = PassApp()
+    panel = $2(None)
+    panel.Show()
+    app.MainLoop()
+
+if __name__ == '__main__':
+    main()

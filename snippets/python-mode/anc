@@ -1,0 +1,6 @@
+# -*- mode: snippet; require-final-newline: nil -*-
+# name: assernotcalled
+# key: anc
+# group : testing
+# --
+self.assertFalse(${1:mock}.called)

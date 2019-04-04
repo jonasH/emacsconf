@@ -1,0 +1,8 @@
+# -*- mode: snippet; require-final-newline: nil -*-
+# name: wcls
+# key: wcls
+# --
+class $1($1Definition):
+    def __init__(self, parent):
+        super($1, self).__init__(parent)
+	$0

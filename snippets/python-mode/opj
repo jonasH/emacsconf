@@ -1,0 +1,6 @@
+# -*- mode: snippet; require-final-newline: nil -*-
+# name: opj
+# key: opj
+# group : nifty
+# --
+os.path.join($0)
