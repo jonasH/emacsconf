@@ -1,19 +1,25 @@
-;; Put in .emacs (add-hook 'after-init-hook (lambda () (load "~/.emacs.d/elisp/real-init.el")))
-;; Requirements
-;; autopair
-;; flycheck
-;; yasnippet
-;; browse-kill-ring
-;; magit
+;; Put in .emacs (add-hook 'after-init-hook (lambda () (load "~/.emacs.d/elisp/real-init.elc")))
+
 (require 'package)
+;;; Code:
 (add-to-list 'package-archives
              '("melpa" . "http://melpa.org/packages/") t)
+(unless (package-installed-p 'autopair)
+  (package-refresh-contents)
+  (package-install 'yasnippet)
+  (package-install 'autopair)
+  (package-install 'flycheck)
+  (package-install 'browse-kill-ring)
+  (package-install 'magit)
+  )
+
+
 (when (< emacs-major-version 24)
   (add-to-list 'package-archives '("gnu" . "http://elpa.gnu.org/packages/")))
 (package-initialize)
 
-(load "~/.emacs.d/elisp/functions.el")
-(load "~/.emacs.d/elisp/highlight-selection.el")
+(load "~/.emacs.d/elisp/functions.elc")
+(load "~/.emacs.d/elisp/highlight-selection.elc")
 (highlight-selection-mode 1)
 (add-to-list 'load-path "~/.emacs.d/elisp")
 (autopair-global-mode 1)
