@@ -1,0 +1,17 @@
+# -*- mode: snippet -*-
+# name: pt
+# key: pt
+# --
+/*! \brief Convert lane detections to external representation.
+ *
+ * \param [out] leftLane Left Lane Signal Group
+ * \param [out] rightLane Right Lane Signal Group
+ * \param [out] neighLeftLane Neighbour Left Lane Signal Group
+ * \param [out] neighRightLane Neighbour Right Lane Signal Group
+ * \param [in] lanesVip The internal representation of lane detections
+ */
+void BUS_convertLanes(SG_LeftLane *leftLane,
+                      SG_RightLane *rightLane,
+                      SG_NeighborLeftLane *neighLeftLane,
+                      SG_NeighborRightLane *neighRightLane,
+                      const FD_Lane_Output *lanesVip);

@@ -1,0 +1,22 @@
+# -*- mode: snippet -*-
+# name: cmd_script
+# --
+import os
+import argparse
+import logging
+
+
+def main():
+    parser = argparse.ArgumentParser(description='Desc.')
+    parser.add_argument('--verbose', action='store_true')
+    parser.add_argument('arg')
+
+    args = parser.parse_args()
+    if args.verbose:
+        logging.basicConfig(level=logging.DEBUG)
+    else:
+        logging.basicConfig(level=logging.INFO)
+    print(args.arg)
+
+if __name__ == '__main__':
+    main()

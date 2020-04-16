@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: ow
+# key: ow
+# --
+ for root, dirs, files in os.walk($1):
+    $0

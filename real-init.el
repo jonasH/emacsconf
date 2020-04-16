@@ -11,8 +11,17 @@
   (package-install 'flycheck)
   (package-install 'browse-kill-ring)
   (package-install 'magit)
+  (package-install 'pyvenv)
+  (package-install 'blacken)
   )
 
+
+;; store all backup and autosave files in the tmp dir
+(setq temporary-file-directory "C:/Users/jonas.hesselryd/AppData/Local/Temp")
+(setq backup-directory-alist
+      `((".*" . ,temporary-file-directory)))
+(setq auto-save-file-name-transforms
+      `((".*" ,temporary-file-directory t)))
 
 (when (< emacs-major-version 24)
   (add-to-list 'package-archives '("gnu" . "http://elpa.gnu.org/packages/")))
@@ -28,6 +37,13 @@
 (autoload 'find-file-in-tags "~/.emacs.d/elisp/find-files-in-tags.el")
 (global-set-key (read-kbd-macro "C-,") 'find-file-in-tags)
 
+(require 'flycheck)
+
+(defvar coding-guidelines-py "C:\\Users\\jonas.hesselryd\\Project\\CodingGuidelines\\Language\\C\\coding_guidelines\\coding_guidelines.py")
+;(load "~/.emacs.d/elisp/c-guidelines.el")
+(load "~/.emacs.d/elisp/c-tasking-checker.el")
+;(add-to-list 'flycheck-checkers 'c-guidelines)
+(add-to-list 'flycheck-checkers 'c-tasking)
 (global-flycheck-mode 1)
 (setq flycheck-check-syntax-automatically '(mode-enabled save))
 
@@ -98,7 +114,7 @@
 			       try-expand-dabbrev-all-buffers) t))
 (global-set-key (kbd "C-å") 'revert-buffer)
 (global-set-key (kbd "<f2>") 'flycheck-next-error)
-
+;; (add-hook 'python-mode-hook 'blacken-mode)
 
 (defun py-extract-variable (var_name)
   (interactive "sVar Name: ")
@@ -141,7 +157,7 @@
     (set-mark-command -1)
     (pop-global-mark)))
 
-
+;; Add CodingGuidelines Flychecker
 (defun py-ev-string ()
   (interactive)
   (when (region-active-p)
@@ -161,6 +177,16 @@
 ;; 	  (lambda () (local-set-key (kbd "<f6>") 'py-run-current-buffer)))
 (add-hook 'python-mode-hook
 	  (lambda () (local-set-key (kbd "C-c i") 'py-copy-to-import)))
+
+
+
+;; Use spaces instead of tab
+(setq-default indent-tabs-mode nil)
+   
+(defvar c-default-style)
+(defvar c-basic-offset)
+(setq c-default-style "linux"
+      c-basic-offset 3)
 
 
 

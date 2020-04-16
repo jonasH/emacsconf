@@ -1,0 +1,35 @@
+# -*- mode: snippet -*-
+# name: vh
+# key: vh
+# --
+/*!
+ * \addto	group SWC
+ * \{
+ *
+ * \file    `(file-name-nondirectory (buffer-file-name))`
+ *
+ * \brief       Convert data types to the types used on the CAN busses.
+ *
+ * Copyright (c) 2019 Veoneer Sweden AB
+ *
+ * All rights reserved. Property of Veoneer Sweden AB.
+ * Restricted rights to use, duplicate or disclose this code
+ * are granted through contract.
+ */
+
+#ifndef ${1:`(upcase (file-name-nondirectory (file-name-sans-extension (buffer-file-name))))`_H}
+#define $1
+
+/* **** Includes **** */
+
+/* **** Defines **** */
+
+/* **** Typedefs **** */
+
+/* **** Extern Variables **** */
+
+/* **** Function Declarations **** */
+
+#endif /* $1 */
+
+/*! \} */

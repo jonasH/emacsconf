@@ -1,0 +1,9 @@
+# -*- mode: snippet -*-
+# name: fig
+# key: fig
+# --
+~~~~ {#fig: caption="Sequence Diagram - Data from VP to RTE"}
+
+$0
+
+~~~~
