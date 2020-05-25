@@ -13,6 +13,7 @@
   (package-install 'magit)
   (package-install 'pyvenv)
   (package-install 'blacken)
+  (package-install 'multiple-cursors)
   )
 
 
@@ -39,9 +40,9 @@
 
 (require 'flycheck)
 
-(defvar coding-guidelines-py "C:\\Users\\jonas.hesselryd\\Project\\CodingGuidelines\\Language\\C\\coding_guidelines\\coding_guidelines.py")
+;;(defvar coding-guidelines-py "C:\\Users\\jonas.hesselryd\\Project\\CodingGuidelines\\Language\\C\\coding_guidelines\\coding_guidelines.py")
 ;(load "~/.emacs.d/elisp/c-guidelines.el")
-(load "~/.emacs.d/elisp/c-tasking-checker.el")
+;;(load "~/.emacs.d/elisp/c-tasking-checker.el")
 ;(add-to-list 'flycheck-checkers 'c-guidelines)
 (add-to-list 'flycheck-checkers 'c-tasking)
 (global-flycheck-mode 1)
