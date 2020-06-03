@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: abstractmethod
+# key: am
+# --
+@abc.abstractmethod
+def $1(self$2) -> $3:
+    pass

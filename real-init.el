@@ -1,24 +1,9 @@
-;; Put in .emacs (add-hook 'after-init-hook (lambda () (load "~/.emacs.d/elisp/real-init.elc")))
+;; Put in .emacs (add-hook 'after-init-hook (lambda () (load "~/.emacs.d/elisp/real-init.el")))
 
-(require 'package)
-;;; Code:
-(add-to-list 'package-archives
-             '("melpa" . "http://melpa.org/packages/") t)
-(unless (package-installed-p 'autopair)
-  (package-refresh-contents)
-  (package-install 'yasnippet)
-  (package-install 'autopair)
-  (package-install 'flycheck)
-  (package-install 'browse-kill-ring)
-  (package-install 'magit)
-  (package-install 'pyvenv)
-  (package-install 'blacken)
-  (package-install 'multiple-cursors)
-  )
 
 
 ;; store all backup and autosave files in the tmp dir
-(setq temporary-file-directory "C:/Users/jonas.hesselryd/AppData/Local/Temp")
+(setq temporary-file-directory "~/Temp/emacs")
 (setq backup-directory-alist
       `((".*" . ,temporary-file-directory)))
 (setq auto-save-file-name-transforms
@@ -28,14 +13,14 @@
   (add-to-list 'package-archives '("gnu" . "http://elpa.gnu.org/packages/")))
 (package-initialize)
 
-(load "~/.emacs.d/elisp/functions.elc")
-(load "~/.emacs.d/elisp/highlight-selection.elc")
+(load "~/.emacs.d/elisp/functions.el")
+(load "~/.emacs.d/elisp/highlight-selection.el")
 (highlight-selection-mode 1)
 (add-to-list 'load-path "~/.emacs.d/elisp")
 (autopair-global-mode 1)
 (setq autopair-autowrap 1)
 
-(autoload 'find-file-in-tags "~/.emacs.d/elisp/find-files-in-tags.el")
+(autoload 'find-file-in-tags "~/.emacs.d/elisp/find-files-in-tags-linux.el")
 (global-set-key (read-kbd-macro "C-,") 'find-file-in-tags)
 
 (require 'flycheck)

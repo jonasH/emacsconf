@@ -65,6 +65,7 @@
 ;; TODO: make 'find-tag adjust for work areas similarly
 
 (require 'etags)
+(require 'cl)
 
 (defvar ffit-version "1.0")
 
