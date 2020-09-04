@@ -1,6 +1,6 @@
 ;; Put in .emacs (add-hook 'after-init-hook (lambda () (load "~/.emacs.d/elisp/real-init.el")))
 
-
+(show-paren-mode 1)
 
 ;; store all backup and autosave files in the tmp dir
 (setq temporary-file-directory "~/Temp/emacs")
@@ -29,8 +29,8 @@
 ;(load "~/.emacs.d/elisp/c-guidelines.el")
 ;;(load "~/.emacs.d/elisp/c-tasking-checker.el")
 ;(add-to-list 'flycheck-checkers 'c-guidelines)
-(add-to-list 'flycheck-checkers 'c-tasking)
-(global-flycheck-mode 1)
+;; (add-to-list 'flycheck-checkers 'c-tasking)
+;; (global-flycheck-mode 1)
 (setq flycheck-check-syntax-automatically '(mode-enabled save))
 
 (require 'windmove)
@@ -68,10 +68,9 @@
   (browse-kill-ring-default-keybindings))
 (global-set-key (kbd "M-y") 'browse-kill-ring)
 
-(require 'linum)
-(global-linum-mode 1)
 
-(setq yas-snippet-dirs '("~/.emacs.d/elisp/snippets")) 
+
+(setq yas-snippet-dirs '("~/.emacs.d/elisp/snippets" "~/.emacs.d/elpa/yasnippet-snippets-20200606.1149/snippets")) 
 (yas-global-mode 1)
 (global-unset-key (kbd "C-x C-b"))
 (global-set-key (kbd "C-x C-b") 'ibuffer)
@@ -163,8 +162,13 @@
 ;; 	  (lambda () (local-set-key (kbd "<f6>") 'py-run-current-buffer)))
 (add-hook 'python-mode-hook
 	  (lambda () (local-set-key (kbd "C-c i") 'py-copy-to-import)))
+(add-hook 'python-mode-hook
+          (lambda () (display-line-numbers-mode 1)))
 
-
+;; c++ stuff
+(add-to-list 'auto-mode-alist '("\\.h\\'" . c++-mode))
+(add-hook 'c++-mode-hook
+          (lambda () (display-line-numbers-mode 1)))
 
 ;; Use spaces instead of tab
 (setq-default indent-tabs-mode nil)
@@ -172,7 +176,7 @@
 (defvar c-default-style)
 (defvar c-basic-offset)
 (setq c-default-style "linux"
-      c-basic-offset 3)
+      c-basic-offset 4)
 
 
 
@@ -193,8 +197,8 @@
    [?\C-\M-s ?\[ ?A ?- ?Z ?\] left ?_ ?\M-l])
 
 
-(when (executable-find "ipython")
-  (setq python-shell-interpreter "ipython"))
+(when (executable-find "python3")
+  (setq python-shell-interpreter "python3"))
 
 
 (fset 'yes-or-no-p 'y-or-n-p)
