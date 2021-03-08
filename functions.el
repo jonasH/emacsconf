@@ -21,7 +21,39 @@
         (isearch-yank-string selection)
       )
       )
+(defun jh-copy-include-to-clipboard ()
+  "Copy the current buffer file name to the clipboard."
+  (interactive)
+  (let ((filename (concat "#include \"" (file-name-nondirectory (buffer-file-name)) "\"")))
+    (when filename
+      (kill-new filename)
+      (message "Copied '%s' to the clipboard." filename))))
 
+
+(defun jh-find-cc-file ()
+  "Finds corresponding .cc file from a .h"
+  (interactive)
+  (find-file-other-window (concat
+            (file-name-directory  (directory-file-name (file-name-directory (buffer-file-name))))
+            (file-name-as-directory "src")
+            (file-name-nondirectory (file-name-sans-extension (buffer-file-name)))
+            ".cc"))
+  )
+(defun jh-find-other-file ()
+"Finds corresponding .cc file from a .h"
+(interactive)
+(let* (
+       (curr-ext (file-name-extension (buffer-file-name)))
+      (other-ext (if (eq curr-ext "h") ".cc" ".h"))
+      (other-folder (if (eq curr-ext "h") "src" "inc"))
+      )
+  (message (concat
+            (file-name-directory  (directory-file-name (file-name-directory (buffer-file-name))))
+            (file-name-as-directory other-folder)
+            (file-name-nondirectory (file-name-sans-extension (buffer-file-name)))
+            other-ext))
+  ))
+(file-name-extension "jonas.cc")
 (defun duplicate-line()
   (interactive)
   (move-beginning-of-line 1)

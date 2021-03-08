@@ -1,5 +1,15 @@
 ;; Put in .emacs (add-hook 'after-init-hook (lambda () (load "~/.emacs.d/elisp/real-init.el")))
+;; The default is 800 kilobytes.  Measured in bytes.
+(setq gc-cons-threshold (* 50 1000 1000))
 
+;; Profile emacs startup
+(add-hook 'emacs-startup-hook
+          (lambda ()
+            (message "*** Emacs loaded in %s with %d garbage collections."
+                     (format "%.2f seconds"
+                             (float-time
+                              (time-subtract after-init-time before-init-time)))
+                     gcs-done)))
 (show-paren-mode 1)
 
 ;; store all backup and autosave files in the tmp dir
@@ -9,20 +19,43 @@
 (setq auto-save-file-name-transforms
       `((".*" ,temporary-file-directory t)))
 
-(when (< emacs-major-version 24)
-  (add-to-list 'package-archives '("gnu" . "http://elpa.gnu.org/packages/")))
+  (add-to-list 'package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
+                                   ("melpa-stable" . "https://stable.melpa.org/packages/")
+                                   ("org" . "https://orgmode.org/elpa/")))
 (package-initialize)
+(unless (package-installed-p 'use-package)
+  (package-install 'use-package))
+(setq use-package-always-ensure 't)
+;; Change the user-emacs-directory to keep unwanted things out of ~/.emacs.d
+(setq user-emacs-directory (expand-file-name "~/.cache/emacs/")
+      url-history-file (expand-file-name "url/history" user-emacs-directory))
+
+
+;; Use no-littering to automatically set common paths to the new user-emacs-directory
+(use-package no-littering)
+(set-default-coding-systems 'utf-8)
+(use-package which-key
+  :init (which-key-mode)
+  :diminish which-key-mode
+  :config
+  (setq which-key-idle-delay 1))
+
 
 (load "~/.emacs.d/elisp/functions.el")
 (load "~/.emacs.d/elisp/highlight-selection.el")
 (highlight-selection-mode 1)
 (add-to-list 'load-path "~/.emacs.d/elisp")
-(autopair-global-mode 1)
-(setq autopair-autowrap 1)
+(use-package autopair
+  :diminish
+  :init (autopair-global-mode 1)
+  :config (setq autopair-autowrap 1)
+  )
 
-(autoload 'find-file-in-tags "~/.emacs.d/elisp/find-files-in-tags-linux.el")
-(global-set-key (read-kbd-macro "C-,") 'find-file-in-tags)
 
+
+;; (autoload 'find-file-in-tags "~/.emacs.d/elisp/find-files-in-tags-linux.el")
+;; (global-set-key (read-kbd-macro "C-,") 'find-file-in-tags)
+(global-set-key (read-kbd-macro "C-,") 'project-find-file)
 (require 'flycheck)
 
 ;;(defvar coding-guidelines-py "C:\\Users\\jonas.hesselryd\\Project\\CodingGuidelines\\Language\\C\\coding_guidelines\\coding_guidelines.py")
@@ -31,14 +64,32 @@
 ;(add-to-list 'flycheck-checkers 'c-guidelines)
 ;; (add-to-list 'flycheck-checkers 'c-tasking)
 ;; (global-flycheck-mode 1)
+(defvar gcc-checker-py "/home/ejonhes/scripts/compile_file.py")
+;;(defvar tidy-checker-py "/home/ejonhes/scripts/tidy_file.py")
+(load "~/.emacs.d/elisp/gcc-checker.el")
+;;(load "~/.emacs.d/elisp/tidy-file.el")
+(add-to-list 'flycheck-checkers 'gcc-checker)
+(add-to-list 'flycheck-checkers 'tidy-checker)
 (setq flycheck-check-syntax-automatically '(mode-enabled save))
+ (add-hook 'c++-mode-hook
+           (lambda () (flycheck-mode 1)))
+ (add-hook 'c++-mode-hook
+           (lambda () (flycheck-select-checker 'gcc-checker)))
 
-(require 'windmove)
-(windmove-default-keybindings 'meta)
+(use-package windmove
+  :config  (windmove-default-keybindings 'meta)
+  )
 
-(setq ido-enable-flex-matching t)
-(setq ido-everywhere t)
-(ido-mode 1)
+(use-package ace-window
+  :bind (("M-o" . ace-window)))
+(use-package ido
+  :init (ido-mode 1)
+  :config
+  (setq ido-enable-flex-matching t)
+  (setq ido-everywhere t)
+  (setq ido-separator "\n")
+  )
+
 
 (add-hook 'org-mode-hook
 	  (lambda ()
@@ -53,25 +104,21 @@
 (global-set-key (kbd "C-x 2") 'my/vsplit-last-buffer)
 (global-set-key (kbd "C-x 3") 'my/hsplit-last-buffer)
 
-(require 'package)
-(add-to-list 'package-archives
-             '("melpa" . "http://melpa.org/packages/") t)
-(when (< emacs-major-version 24)
-  (add-to-list 'package-archives '("gnu" . "http://elpa.gnu.org/packages/")))
-(package-initialize)
-;;magit
-(setq magit-auto-revert-mode nil)
-(setq magit-last-seen-setup-instructions "1.4.0")
-(global-set-key (kbd "M-<f1>") 'magit-status)
+(use-package browse-kill-ring
+  :bind (("M-y" . browse-kill-ring))
+  :config (browse-kill-ring-default-keybindings)
+  )
+(use-package multiple-cursors
+  :bind (("<f9>" . mc/mark-next-like-this)
+         ("C-<f9>" . mc/skip-to-next-like-this)))
 
-(when (require 'browse-kill-ring nil 'noerror)
-  (browse-kill-ring-default-keybindings))
-(global-set-key (kbd "M-y") 'browse-kill-ring)
+(use-package yasnippet
+  :config
+  (yas-global-mode 1)
+  (add-to-list #'yas-snippet-dirs "~/.emacs.d/elisp/snippets")
+  (yas-reload-all)
+  )
 
-
-
-(setq yas-snippet-dirs '("~/.emacs.d/elisp/snippets" "~/.emacs.d/elpa/yasnippet-snippets-20200606.1149/snippets")) 
-(yas-global-mode 1)
 (global-unset-key (kbd "C-x C-b"))
 (global-set-key (kbd "C-x C-b") 'ibuffer)
 (global-set-key (kbd "<f12>") 'kill-this-buffer)
@@ -84,20 +131,8 @@
 (global-set-key (kbd "C-w") 'super-delete)
 (global-set-key (kbd "C-s") 'super-isearch-forward)
 (global-set-key (kbd "C-;") 'comment-or-uncomment-region)
-(global-set-key (kbd "<f11>") 'mc/edit-lines)
-(global-set-key (kbd "C-<f11>") 'mc/mark-all-like-this)
-(global-set-key (kbd "<f9>") 'mc/mark-next-like-this)
-(global-set-key (kbd "C-<f9>") 'mc/skip-to-next-like-this)
-(global-set-key (kbd "<f10>") 'mc/mark-previous-like-this)
-(global-set-key (kbd "C-<f10>") 'mc/skip-to-previous-like-this)
-(global-unset-key (kbd "M-<down-mouse-1>"))
-(global-set-key (kbd "M-<mouse-1>") 'mc/add-cursor-on-click)
 (global-set-key (kbd "M-p") 'move-text-up)
 (global-set-key (kbd "M-n") 'move-text-down)
-(global-set-key (kbd "C--") (make-hippie-expand-function
-			     '(try-expand-dabbrev
-			       try-expand-dabbrev-all-buffers) t))
-(global-set-key (kbd "C-å") 'revert-buffer)
 (global-set-key (kbd "<f2>") 'flycheck-next-error)
 ;; (add-hook 'python-mode-hook 'blacken-mode)
 

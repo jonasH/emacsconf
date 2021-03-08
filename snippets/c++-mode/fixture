@@ -1,0 +1,18 @@
+# -*- mode: snippet -*-
+# name: fixture
+# key: fixture
+# --
+class $1 : public ::testing::Test
+{
+protected:
+    RuError m_err;
+    $0
+    $1()
+        : m_err{}
+    {}
+
+
+    virtual void SetUp() override {}
+
+    virtual void TearDown() override {}
+};

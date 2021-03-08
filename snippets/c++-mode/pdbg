@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: pdbg
+# key: pdbg
+# --
+std::cout << __FUNCTION__ << " " << __LINE__ << '\n';

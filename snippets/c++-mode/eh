@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: eh
+# key: eh
+# --
+CATCH_N_THROW_ERROR(err);

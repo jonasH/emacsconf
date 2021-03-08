@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: ec
+# key: ec
+# --
+EXPECT_CALL(${1:stub}, ${2:function}).$0;
