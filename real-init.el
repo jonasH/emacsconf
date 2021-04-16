@@ -19,7 +19,9 @@
       `((".*" ,temporary-file-directory t)))
 
 
-(add-to-list 'package-archives '("melpa-stable" . "https://stable.melpa.org/packages/") t)
+;;(add-to-list 'package-archives '("melpa-stable" . "https://stable.melpa.org/packages/") t)
+(add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
+;; (add-to-list 'package-archives '("melpa-stable" . "https://stable.melpa.org/packages/") t)
 (add-to-list 'package-archives '("org" . "https://orgmode.org/elpa/"))
 (package-initialize)
 (unless (package-installed-p 'use-package)
@@ -39,6 +41,8 @@
   :config
   (setq which-key-idle-delay 1))
 
+(use-package weyland-yutani-theme
+  :config (load-theme 'weyland-yutani))
 
 (load "~/.emacs.d/elisp/functions.el")
 (load "~/.emacs.d/elisp/highlight-selection.el")
