@@ -1,7 +1,6 @@
 ;; Put in .emacs (add-hook 'after-init-hook (lambda () (load "~/.emacs.d/elisp/real-init.el")))
 ;; The default is 800 kilobytes.  Measured in bytes.
 (setq gc-cons-threshold (* 50 1000 1000))
-
 ;; Profile emacs startup
 (add-hook 'emacs-startup-hook
           (lambda ()
@@ -19,9 +18,9 @@
 (setq auto-save-file-name-transforms
       `((".*" ,temporary-file-directory t)))
 
-  (add-to-list 'package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
-                                   ("melpa-stable" . "https://stable.melpa.org/packages/")
-                                   ("org" . "https://orgmode.org/elpa/")))
+
+(add-to-list 'package-archives '("melpa-stable" . "https://stable.melpa.org/packages/") t)
+(add-to-list 'package-archives '("org" . "https://orgmode.org/elpa/"))
 (package-initialize)
 (unless (package-installed-p 'use-package)
   (package-install 'use-package))
@@ -44,6 +43,9 @@
 (load "~/.emacs.d/elisp/functions.el")
 (load "~/.emacs.d/elisp/highlight-selection.el")
 (highlight-selection-mode 1)
+(require 'diminish)
+(diminish 'highlight-selection)
+
 (add-to-list 'load-path "~/.emacs.d/elisp")
 (use-package autopair
   :diminish
@@ -100,6 +102,21 @@
 	    (local-unset-key (kbd "M-<right>"))
 	    ))
 
+
+(add-hook 'term-mode-hook 
+                         	  (lambda ()
+	                            (define-key (current-local-map) (kbd "C-c C-y") 'term-paste)))
+
+(use-package hl-todo
+  :ensure t
+  :diminish
+  :custom-face
+  (hl-todo ((t (:inherit hl-todo :italic t))))
+  :hook ((prog-mode . hl-todo-mode)
+         (yaml-mode . hl-todo-mode)))
+
+(use-package protobuf-mode
+  )
 
 (global-set-key (kbd "C-x 2") 'my/vsplit-last-buffer)
 (global-set-key (kbd "C-x 3") 'my/hsplit-last-buffer)
@@ -200,10 +217,14 @@
 (add-hook 'python-mode-hook
           (lambda () (display-line-numbers-mode 1)))
 
-;; c++ stuff
-(add-to-list 'auto-mode-alist '("\\.h\\'" . c++-mode))
-(add-hook 'c++-mode-hook
-          (lambda () (display-line-numbers-mode 1)))
+;; Enable line numbers for some modes
+(dolist (mode '(text-mode-hook
+                prog-mode-hook
+                conf-mode-hook))
+  (add-hook mode (lambda () (display-line-numbers-mode 1))))
+;; Override some modes which derive from the above
+(dolist (mode '(org-mode-hook))
+  (add-hook mode (lambda () (display-line-numbers-mode 0))))
 
 ;; Use spaces instead of tab
 (setq-default indent-tabs-mode nil)

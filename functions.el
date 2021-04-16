@@ -10,6 +10,12 @@
       (search-selection (region-beginning) (region-end))
     (isearch-forward)
   ))
+(defun jh-search-replace ()
+  (interactive)
+  (if (region-active-p)
+      (query-replace (buffer-substring (region-beginning) (region-end)) "")
+    (query-replace)
+  ))
 
 (defun search-selection (beg end)
       "search for selected text"
