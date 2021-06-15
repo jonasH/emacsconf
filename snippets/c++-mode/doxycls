@@ -1,0 +1,10 @@
+# -*- mode: snippet -*-
+# name: doxycls
+# key: doxycls
+# --
+/*! @brief $1
+ *
+ *  $0
+ *  
+ *  
+ */

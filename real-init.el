@@ -41,8 +41,10 @@
   :config
   (setq which-key-idle-delay 1))
 
-(use-package weyland-yutani-theme
-  :config (load-theme 'weyland-yutani))
+;; (use-package weyland-yutani-theme
+;;   :config (load-theme 'weyland-yutani))
+;; (add-hook 'term-mode-hook
+;;           (lambda nil (color-theme-buffer-local 'color-theme-retro-orange (current-buffer))))
 
 (load "~/.emacs.d/elisp/functions.el")
 (load "~/.emacs.d/elisp/highlight-selection.el")
@@ -107,9 +109,31 @@
 	    ))
 
 
-(add-hook 'term-mode-hook 
-                         	  (lambda ()
-	                            (define-key (current-local-map) (kbd "C-c C-y") 'term-paste)))
+
+;; (use-package org-bullets
+;;     :config
+;;     (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
+(let* ((variable-tuple
+          (cond ((x-list-fonts "ETBembo")         '(:font "ETBembo"))
+                ((x-list-fonts "Source Sans Pro") '(:font "Source Sans Pro"))
+                ((x-list-fonts "Lucida Grande")   '(:font "Lucida Grande"))
+                ((x-list-fonts "Verdana")         '(:font "Verdana"))
+                ((x-family-fonts "Sans Serif")    '(:family "Sans Serif"))
+                (nil (warn "Cannot find a Sans Serif Font.  Install Source Sans Pro."))))
+         (base-font-color     (face-foreground 'default nil 'default))
+         (headline           `(:inherit default :weight bold :foreground ,base-font-color)))
+
+    (custom-theme-set-faces
+     'user
+     `(org-level-8 ((t (,@headline ,@variable-tuple))))
+     `(org-level-7 ((t (,@headline ,@variable-tuple))))
+     `(org-level-6 ((t (,@headline ,@variable-tuple))))
+     `(org-level-5 ((t (,@headline ,@variable-tuple))))
+     `(org-level-4 ((t (,@headline ,@variable-tuple :height 1.1))))
+     `(org-level-3 ((t (,@headline ,@variable-tuple :height 1.25))))
+     `(org-level-2 ((t (,@headline ,@variable-tuple :height 1.5))))
+     `(org-level-1 ((t (,@headline ,@variable-tuple :height 1.75))))
+     `(org-document-title ((t (,@headline ,@variable-tuple :height 2.0 :underline nil))))))
 
 (use-package hl-todo
   :ensure t
@@ -139,13 +163,15 @@
   (add-to-list #'yas-snippet-dirs "~/.emacs.d/elisp/snippets")
   (yas-reload-all)
   )
-
+(global-unset-key (kbd "M-z"))
+(global-set-key (kbd "M-z") 'zap-up-to-char)
 (global-unset-key (kbd "C-x C-b"))
 (global-set-key (kbd "C-x C-b") 'ibuffer)
 (global-set-key (kbd "<f12>") 'kill-this-buffer)
 (global-set-key (kbd "<f8>") 'gud-cont)
 (global-set-key (kbd "<f7>") 'gud-next)
 (global-set-key (kbd "<f6>") 'gud-step)
+(global-set-key (kbd "<f5>") 'jh-switch-to-terminal)
 (global-unset-key (kbd "C-v"))
 (global-set-key (kbd "C-v") 'yank)
 (global-set-key (kbd "C-<next>") 'super-duplicate)

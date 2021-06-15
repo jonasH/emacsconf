@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: mm
+# key: mm
+# --
+MOCK_METHOD(($1), $2, ($3), ($0override));

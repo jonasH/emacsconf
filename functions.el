@@ -162,3 +162,12 @@
   (transpose-words -1)
   (backward-word 2)
   (forward-char))
+
+(defun jh-switch-to-terminal ()
+  (interactive)
+  (if (get-buffer "terminal")
+      (switch-to-buffer "terminal")
+    (progn (ansi-term "/bin/bash")
+           (rename-buffer "terminal")
+     ))
+  )
