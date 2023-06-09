@@ -18,7 +18,7 @@
 (setq auto-save-file-name-transforms
       `((".*" ,temporary-file-directory t)))
 
-
+(require 'package)
 ;;(add-to-list 'package-archives '("melpa-stable" . "https://stable.melpa.org/packages/") t)
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
 ;; (add-to-list 'package-archives '("melpa-stable" . "https://stable.melpa.org/packages/") t)
@@ -33,7 +33,7 @@
 
 
 ;; Use no-littering to automatically set common paths to the new user-emacs-directory
-(use-package no-littering)
+;;(use-package no-littering)
 (set-default-coding-systems 'utf-8)
 (use-package which-key
   :init (which-key-mode)
@@ -49,21 +49,24 @@
 (load "~/.emacs.d/elisp/functions.el")
 (load "~/.emacs.d/elisp/highlight-selection.el")
 (highlight-selection-mode 1)
+(use-package diminish)
 (require 'diminish)
 (diminish 'highlight-selection)
 
 (add-to-list 'load-path "~/.emacs.d/elisp")
-(use-package autopair
-  :diminish
-  :init (autopair-global-mode 1)
-  :config (setq autopair-autowrap 1)
-  )
+;; (use-package autopair
+;;   :diminish
+;;   :init (autopair-global-mode 1)
+;;   :config (setq autopair-autowrap 1)
+;;   )
+
 
 
 
 ;; (autoload 'find-file-in-tags "~/.emacs.d/elisp/find-files-in-tags-linux.el")
 ;; (global-set-key (read-kbd-macro "C-,") 'find-file-in-tags)
 (global-set-key (read-kbd-macro "C-,") 'project-find-file)
+(use-package flycheck)
 (require 'flycheck)
 
 ;;(defvar coding-guidelines-py "C:\\Users\\jonas.hesselryd\\Project\\CodingGuidelines\\Language\\C\\coding_guidelines\\coding_guidelines.py")
@@ -72,24 +75,30 @@
 ;(add-to-list 'flycheck-checkers 'c-guidelines)
 ;; (add-to-list 'flycheck-checkers 'c-tasking)
 ;; (global-flycheck-mode 1)
-(defvar gcc-checker-py "/home/ejonhes/scripts/compile_file.py")
+;;(defvar gcc-checker-py "/home/ejonhes/scripts/compile_file.py")
 ;;(defvar tidy-checker-py "/home/ejonhes/scripts/tidy_file.py")
-(load "~/.emacs.d/elisp/gcc-checker.el")
+;;(load "~/.emacs.d/elisp/gcc-checker.el")
 ;;(load "~/.emacs.d/elisp/tidy-file.el")
-(add-to-list 'flycheck-checkers 'gcc-checker)
-(add-to-list 'flycheck-checkers 'tidy-checker)
-(setq flycheck-check-syntax-automatically '(mode-enabled save))
+;;(add-to-list 'flycheck-checkers 'gcc-checker)
+;; (add-to-list 'flycheck-checkers 'tidy-checker)
+;; (setq flycheck-check-syntax-automatically '(mode-enabled save))
+;;  (add-hook 'c++-mode-hook
+;;            (lambda () (flycheck-mode 1)))
+(use-package lsp)
+(use-package clang-format+
+  :diminish)
  (add-hook 'c++-mode-hook
-           (lambda () (flycheck-mode 1)))
+           (lambda () (lsp)))
  (add-hook 'c++-mode-hook
-           (lambda () (flycheck-select-checker 'gcc-checker)))
+           (lambda () (clang-format+-mode)))
 
 (use-package windmove
   :config  (windmove-default-keybindings 'meta)
   )
 
-(use-package ace-window
-  :bind (("M-o" . ace-window)))
+;; (use-package ace-window
+;;   :bind (("M-o" . ace-window)))
+
 (use-package ido
   :init (ido-mode 1)
   :config
@@ -110,30 +119,6 @@
 
 
 
-;; (use-package org-bullets
-;;     :config
-;;     (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
-(let* ((variable-tuple
-          (cond ((x-list-fonts "ETBembo")         '(:font "ETBembo"))
-                ((x-list-fonts "Source Sans Pro") '(:font "Source Sans Pro"))
-                ((x-list-fonts "Lucida Grande")   '(:font "Lucida Grande"))
-                ((x-list-fonts "Verdana")         '(:font "Verdana"))
-                ((x-family-fonts "Sans Serif")    '(:family "Sans Serif"))
-                (nil (warn "Cannot find a Sans Serif Font.  Install Source Sans Pro."))))
-         (base-font-color     (face-foreground 'default nil 'default))
-         (headline           `(:inherit default :weight bold :foreground ,base-font-color)))
-
-    (custom-theme-set-faces
-     'user
-     `(org-level-8 ((t (,@headline ,@variable-tuple))))
-     `(org-level-7 ((t (,@headline ,@variable-tuple))))
-     `(org-level-6 ((t (,@headline ,@variable-tuple))))
-     `(org-level-5 ((t (,@headline ,@variable-tuple))))
-     `(org-level-4 ((t (,@headline ,@variable-tuple :height 1.1))))
-     `(org-level-3 ((t (,@headline ,@variable-tuple :height 1.25))))
-     `(org-level-2 ((t (,@headline ,@variable-tuple :height 1.5))))
-     `(org-level-1 ((t (,@headline ,@variable-tuple :height 1.75))))
-     `(org-document-title ((t (,@headline ,@variable-tuple :height 2.0 :underline nil))))))
 
 (use-package hl-todo
   :ensure t
@@ -146,8 +131,11 @@
 (use-package protobuf-mode
   )
 
+(use-package lsp-mode)
+
 (global-set-key (kbd "C-x 2") 'my/vsplit-last-buffer)
 (global-set-key (kbd "C-x 3") 'my/hsplit-last-buffer)
+(global-set-key (kbd "M-o") 'ff-find-other-file)
 
 (use-package browse-kill-ring
   :bind (("M-y" . browse-kill-ring))
@@ -182,6 +170,8 @@
 (global-set-key (kbd "M-n") 'move-text-down)
 (global-set-key (kbd "<f2>") 'flycheck-next-error)
 ;; (add-hook 'python-mode-hook 'blacken-mode)
+(use-package blacken)
+(use-package pyvenv)
 
 (defun py-extract-variable (var_name)
   (interactive "sVar Name: ")
@@ -198,7 +188,7 @@
 	(yank)
       )
   )
-
+   (add-hook 'xref-backend-functions #'dumb-jump-xref-activate)
 (defun py-extract-function (var_name)
   (interactive "sVar Name: ")
   (when (region-active-p)
@@ -271,6 +261,12 @@
 
 (add-hook 'python-mode-hook
 	  (lambda () (local-set-key (kbd "C-c C-w") 'py-swap-assignment)))
+
+
+(add-hook 'python-mode-hook
+          'electric-pair-mode)
+(add-hook 'python-mode-hook
+	  'flycheck-mode)
 
 (defun kill-trailing-whitespace ()
      (interactive)
