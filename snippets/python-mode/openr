@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: openr
+# key: openr
+# --
+with open($1, "r", encoding="utf8") as f:
+    $0

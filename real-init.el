@@ -162,7 +162,8 @@
 (global-set-key (kbd "<f5>") 'jh-switch-to-terminal)
 (global-unset-key (kbd "C-v"))
 (global-set-key (kbd "C-v") 'yank)
-(global-set-key (kbd "C-<next>") 'super-duplicate)
+(global-unset-key (kbd "C-q"))
+(global-set-key (kbd "C-q") 'super-duplicate)
 (global-set-key (kbd "C-w") 'super-delete)
 (global-set-key (kbd "C-s") 'super-isearch-forward)
 (global-set-key (kbd "C-;") 'comment-or-uncomment-region)
@@ -230,6 +231,8 @@
 
 (add-hook 'python-mode-hook
 	  (lambda () (local-set-key (kbd "C-c C-e") 'py-extract-variable)))
+(add-hook 'python-mode-hook
+	  (lambda () (local-set-key (kbd "C-c b") 'blacken-buffer)))
 ;; (add-hook 'python-mode-hook
 ;; 	  (lambda () (local-set-key (kbd "<f6>") 'py-run-current-buffer)))
 (add-hook 'python-mode-hook

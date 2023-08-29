@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: up
+# key: up
+# --
+std::unique_ptr<$0>
