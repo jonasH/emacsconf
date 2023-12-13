@@ -10,7 +10,12 @@
                               (time-subtract after-init-time before-init-time)))
                      gcs-done)))
 (show-paren-mode 1)
+(defun stop-using-minibuffer ()
+  "kill the minibuffer"
+  (when (and (>= (recursion-depth) 1) (active-minibuffer-window))
+    (abort-recursive-edit)))
 
+(add-hook 'mouse-leave-buffer-hook 'stop-using-minibuffer)
 ;; store all backup and autosave files in the tmp dir
 (setq temporary-file-directory "~/Temp/emacs")
 (setq backup-directory-alist
@@ -84,7 +89,7 @@
 ;; (setq flycheck-check-syntax-automatically '(mode-enabled save))
 ;;  (add-hook 'c++-mode-hook
 ;;            (lambda () (flycheck-mode 1)))
-(use-package lsp)
+(use-package lsp-mode)
 (use-package clang-format+
   :diminish)
  (add-hook 'c++-mode-hook
@@ -98,6 +103,7 @@
 
 ;; (use-package ace-window
 ;;   :bind (("M-o" . ace-window)))
+
 
 (use-package ido
   :init (ido-mode 1)
@@ -145,6 +151,63 @@
   :bind (("<f9>" . mc/mark-next-like-this)
          ("C-<f9>" . mc/skip-to-next-like-this)))
 
+(use-package tree-sitter
+  :preface
+  (defun mp-setup-install-grammars ()
+    "Install Tree-sitter grammars if they are absent."
+    (interactive)
+    (dolist (grammar
+             '(
+               (javascript . ("https://github.com/tree-sitter/tree-sitter-javascript" "master" "src"))
+               (python "https://github.com/tree-sitter/tree-sitter-python")
+               
+               (yaml "https://github.com/ikatyang/tree-sitter-yaml")))
+      (add-to-list 'treesit-language-source-alist grammar)
+      ;; Only install `grammar' if we don't already have it
+      ;; installed. However, if you want to *update* a grammar then
+      ;; this obviously prevents that from happening.
+      (unless (treesit-language-available-p (car grammar))
+        (treesit-install-language-grammar (car grammar)))))
+
+  ;; Optional, but recommended. Tree-sitter enabled major modes are
+  ;; distinct from their ordinary counterparts.
+  ;;
+  ;; You can remap major modes with `major-mode-remap-alist'. Note
+  ;; that this does *not* extend to hooks! Make sure you migrate them
+  ;; also
+  (dolist (mapping '((python-mode . python-ts-mode)
+                     (css-mode . css-ts-mode)
+                     (typescript-mode . tsx-ts-mode)
+                     (json-mode . json-ts-mode)
+                     (js-mode . js-ts-mode)
+                     (css-mode . css-ts-mode)
+                     (yaml-mode . yaml-ts-mode)))
+    (add-to-list 'major-mode-remap-alist mapping))
+
+  :config
+  (mp-setup-install-grammars)
+)
+
+  ;; Do not forget to customize Combobulate to your liking:
+  ;;
+  ;;  M-x customize-group RET combobulate RET
+  ;;
+  ;; (use-package combobulate
+  ;;   :preface
+  ;;   ;; You can customize Combobulate's key prefix here.
+  ;;   ;; Note that you may have to restart Emacs for this to take effect!
+  ;;   (setq combobulate-key-prefix "C-c o")
+
+  ;;   ;; Optional, but recommended.
+  ;;   ;;
+  ;;   ;; You can manually enable Combobulate with `M-x
+  ;;   ;; combobulate-mode'.
+  ;;   :hook ((python-ts-mode . combobulate-mode)
+  ;;          (json-ts-mode . combobulate-mode))
+  ;;   ;; Amend this to the directory where you keep Combobulate's source
+  ;;   ;; code.
+  ;;   :load-path ("~/projects/combobulate"))
+
 (use-package yasnippet
   :config
   (yas-global-mode 1)
@@ -170,7 +233,7 @@
 (global-set-key (kbd "M-p") 'move-text-up)
 (global-set-key (kbd "M-n") 'move-text-down)
 (global-set-key (kbd "<f2>") 'flycheck-next-error)
-;; (add-hook 'python-mode-hook 'blacken-mode)
+;; (add-hook 'python-ts-mode-hook 'blacken-mode)
 (use-package blacken)
 (use-package pyvenv)
 
@@ -229,15 +292,15 @@
     (pdb (concat "python " script-buffer))
     (other-window -1)))
 
-(add-hook 'python-mode-hook
+(add-hook 'python-ts-mode-hook
 	  (lambda () (local-set-key (kbd "C-c C-e") 'py-extract-variable)))
-(add-hook 'python-mode-hook
+(add-hook 'python-ts-mode-hook
 	  (lambda () (local-set-key (kbd "C-c b") 'blacken-buffer)))
-;; (add-hook 'python-mode-hook
+;; (add-hook 'python-ts-mode-hook
 ;; 	  (lambda () (local-set-key (kbd "<f6>") 'py-run-current-buffer)))
-(add-hook 'python-mode-hook
+(add-hook 'python-ts-mode-hook
 	  (lambda () (local-set-key (kbd "C-c i") 'py-copy-to-import)))
-(add-hook 'python-mode-hook
+(add-hook 'python-ts-mode-hook
           (lambda () (display-line-numbers-mode 1)))
 
 ;; Enable line numbers for some modes
@@ -262,13 +325,13 @@
 (fset 'py-swap-assignment
    [?\C-a C-right C-left ?\C-  ?\C-s ?= left left ?\C-x ?\C-x ?\C-w C-right C-left ?\C-  end ?\C-w left left left ?\C-y end ?\M-2 ?\C-y])
 
-(add-hook 'python-mode-hook
+(add-hook 'python-ts-mode-hook
 	  (lambda () (local-set-key (kbd "C-c C-w") 'py-swap-assignment)))
 
 
-(add-hook 'python-mode-hook
+(add-hook 'python-ts-mode-hook
           'electric-pair-mode)
-(add-hook 'python-mode-hook
+(add-hook 'python-ts-mode-hook
 	  'flycheck-mode)
 
 (defun kill-trailing-whitespace ()
